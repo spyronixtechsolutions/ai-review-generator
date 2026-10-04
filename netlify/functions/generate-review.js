@@ -7,13 +7,13 @@ exports.handler = async (event) => {
       return {
         statusCode: 500,
         body: JSON.stringify({ 
-          error: "GEMINI_API_KEY environment variable is missing." 
+          error: "GEMINI_API_KEY environment variable is missing in Netlify configuration." 
         })
       };
     }
 
     const lengthMap = {
-      short: "40 to 60 words",
+      short: "20 to 40 words",
       medium: "60 to 90 words",
       long: "100 to 140 words"
     };
@@ -45,8 +45,8 @@ Formatting & Tone Rules:
 - Do not repeat identical phrases across reviews.
 `;
 
-    // Active Gemini models with automatic failover
-    const models = ["gemini-2.5-flash-lite", "gemini-2.5-flash", "gemini-2.0-flash"];
+    // Active production models array
+    const models = ["gemini-2.5-flash", "gemini-2.5-flash-lite"];
     let lastErrorMessage = "";
 
     for (const model of models) {
