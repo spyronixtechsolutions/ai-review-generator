@@ -13,7 +13,7 @@ exports.handler = async (event) => {
     }
 
     const lengthMap = {
-      short: "20 to 40 words",
+      short: "40 to 60 words",
       medium: "60 to 90 words",
       long: "100 to 140 words"
     };
@@ -45,8 +45,8 @@ Formatting & Tone Rules:
 - Do not repeat identical phrases across reviews.
 `;
 
-    // Active production models array
-    const models = ["gemini-2.5-flash", "gemini-2.5-flash-lite"];
+    // Only active Gemini models
+    const models = ["gemini-2.5-flash-lite", "gemini-2.5-flash"];
     let lastErrorMessage = "";
 
     for (const model of models) {
@@ -77,7 +77,10 @@ Formatting & Tone Rules:
           };
         }
 
+        // Capture error message from current model
         lastErrorMessage = result.error?.message || JSON.stringify(result);
+        console.error(`Error with ${model}:`, lastErrorMessage);
+
       } catch (err) {
         lastErrorMessage = err.message;
       }
