@@ -32,6 +32,31 @@
         id="treatment" 
         placeholder="Treatment"
       >
+      <div class="form-group">
+
+      <!-- Doctor/Hospital (Set automatically from URL) -->
+      <input 
+        type="text" 
+        id="doctor" 
+        placeholder="Clinic/Hospital Name"
+        readonly
+      >
+
+      <!-- NEW: Optional Specific Doctor Name -->
+      <input 
+        type="text" 
+        id="specific-doctor" 
+        placeholder="Treated by Doctor (Optional)"
+      >
+
+      <!-- Locations will be added dynamically -->
+      <select id="location"></select>
+
+      <input 
+        type="text" 
+        id="treatment" 
+        placeholder="Treatment"
+      >
 
     </div>
 
