@@ -1,156 +1,256 @@
+/* ================= CSS VARIABLES ================= */
+:root {
+  --primary-color: #2563eb; /* Spyronix Blue - Change this hex to match your logo exactly */
+  --primary-hover: #1d4ed8;
+  --bg-gradient-1: #f3f4f6;
+  --bg-gradient-2: #e5e7eb;
+  --text-main: #1f2937;
+  --text-muted: #6b7280;
+  --card-bg: rgba(255, 255, 255, 0.95);
+  --border-radius: 16px;
+  --input-border: #d1d5db;
+}
+
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  font-family: 'Segoe UI', sans-serif;
+  font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
 }
 
 body {
-  background: linear-gradient(135deg, #667eea, #764ba2);
+  background: linear-gradient(135deg, var(--bg-gradient-1), var(--bg-gradient-2));
   min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  color: var(--text-main);
+}
+
+.wrapper {
+  width: 100%;
+  max-width: 550px;
+}
+
+/* Card Styling */
+.card {
+  background: var(--card-bg);
+  backdrop-filter: blur(10px);
+  padding: 40px;
+  border-radius: var(--border-radius);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08), 0 1px 3px rgba(0,0,0,0.05);
+  border: 1px solid rgba(255,255,255,0.5);
+}
+
+/* Logo */
+.logo-container {
+  text-align: center;
+  margin-bottom: 20px;
+}
+.brand-logo {
+  max-width: 160px;
+  height: auto;
+}
+
+h1 {
+  text-align: center;
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--text-main);
+  margin-bottom: 5px;
+}
+
+.subtitle {
+  text-align: center;
+  font-size: 14px;
+  color: var(--text-muted);
+  margin-bottom: 30px;
+}
+
+/* Form Fields */
+.form-group, .row {
+  margin-bottom: 20px;
+}
+
+.row {
+  display: flex;
+  gap: 15px;
+}
+
+.input-col {
+  flex: 1;
+}
+
+label {
+  font-size: 13px;
+  font-weight: 600;
+  margin-bottom: 6px;
+  display: block;
+  color: var(--text-main);
+}
+
+input, select {
+  width: 100%;
+  padding: 12px 16px;
+  border-radius: 10px;
+  border: 1px solid var(--input-border);
+  background: #fff;
+  color: var(--text-main);
+  font-size: 14px;
+  transition: all 0.3s ease;
+  outline: none;
+}
+
+input:focus, select:focus {
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+}
+
+input[readonly] {
+  background: #f9fafb;
+  cursor: not-allowed;
+  color: var(--text-muted);
+}
+
+select {
+  cursor: pointer;
+  appearance: none;
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%236b7280' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  background-size: 16px;
+}
+
+/* Primary Button */
+.generate-btn {
+  width: 100%;
+  padding: 14px;
+  background: var(--primary-color);
+  border: none;
+  border-radius: 10px;
+  font-weight: 600;
+  font-size: 16px;
+  color: white;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-top: 10px;
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
-.wrapper {
-  width: 95%;
-  max-width: 520px;
-}
-
-.card {
-  background: rgba(255,255,255,0.15);
-  backdrop-filter: blur(25px);
-  padding: 30px;
-  border-radius: 22px;
-  color: white;
-  box-shadow: 0 20px 40px rgba(0,0,0,0.25);
-}
-
-h1 {
-  text-align: center;
-  margin-bottom: 25px;
-  font-size: 22px;
-  font-weight: 600;
-  letter-spacing: 0.5px;
-}
-
-/* Form Fields */
-
-.form-group input,
-select {
-  width: 100%;
-  padding: 11px;
-  margin-bottom: 14px;
-  border-radius: 10px;
-  border: none;
-  outline: none;
-  font-size: 14px;
-}
-
-.form-group input {
-  background: rgba(255,255,255,0.9);
-  color: #333;
-}
-
-select {
-  background: rgba(255,255,255,0.9);
-  color: #333;
-  cursor: pointer;
-}
-
-label {
-  font-size: 13px;
-  margin-bottom: 6px;
-  display: block;
-  opacity: 0.85;
-}
-
-/* Star Rating */
-
-.rating {
-  margin: 18px 0;
-}
-
-.stars span {
-  font-size: 26px;
-  cursor: pointer;
-  transition: transform 0.2s, opacity 0.2s;
-}
-
-.stars span:hover {
-  transform: scale(1.3);
-}
-
-/* Two Column Rows */
-
-.row {
-  display: flex;
-  gap: 12px;
-}
-
-/* Generate Button */
-
-.generate-btn {
-  margin-top: 20px;
-  width: 100%;
-  padding: 13px;
-  background: linear-gradient(135deg, #00c6ff, #0072ff);
-  border: none;
-  border-radius: 14px;
-  font-weight: bold;
-  font-size: 15px;
-  color: white;
-  cursor: pointer;
-  transition: 0.3s;
-}
-
 .generate-btn:hover {
+  background: var(--primary-hover);
   transform: translateY(-2px);
-  box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+  box-shadow: 0 8px 15px rgba(37, 99, 235, 0.2);
+}
+
+.generate-btn:disabled {
+  background: #9ca3af;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
 }
 
 /* Reviews */
-
 .reviews-container {
-  margin-top: 25px;
+  margin-top: 30px;
 }
 
 .review-card {
-  background: rgba(255,255,255,0.25);
-  padding: 14px;
-  border-radius: 14px;
-  margin-bottom: 14px;
+  background: #f8fafc;
+  padding: 20px;
+  border-radius: 12px;
+  margin-bottom: 16px;
   font-size: 14px;
-  line-height: 1.5;
+  line-height: 1.6;
+  border: 1px solid #e2e8f0;
+  color: var(--text-main);
+  animation: slideIn 0.4s ease forwards;
 }
 
 .review-card button {
-  margin-top: 10px;
-  padding: 6px 12px;
-  border-radius: 8px;
-  border: none;
-  background: white;
+  margin-top: 15px;
+  padding: 8px 16px;
+  border-radius: 6px;
+  border: 1px solid var(--primary-color);
+  background: transparent;
+  color: var(--primary-color);
   cursor: pointer;
-  font-size: 12px;
+  font-size: 13px;
+  font-weight: 600;
+  transition: 0.2s ease;
+  margin-right: 10px;
+}
+
+.review-card button:hover {
+  background: var(--primary-color);
+  color: white;
+}
+
+/* Loading State */
+.loading {
+  margin-top: 25px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  color: var(--text-muted);
+  font-size: 14px;
   font-weight: 500;
 }
 
-/* Loading */
-
-.loading {
-  margin-top: 15px;
-  font-style: italic;
-  opacity: 0.8;
-  animation: pulse 1.2s infinite;
+.spinner {
+  width: 18px;
+  height: 18px;
+  border: 2px solid var(--input-border);
+  border-top-color: var(--primary-color);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
 }
 
 .hidden {
-  display: none;
+  display: none !important;
 }
 
-@keyframes pulse {
-  0% { opacity: 0.4; }
-  50% { opacity: 1; }
-  100% { opacity: 0.4; }
+/* Spyronix Footer */
+.footer {
+  margin-top: 40px;
+  text-align: center;
+  font-size: 13px;
+  color: var(--text-muted);
+  border-top: 1px solid #e5e7eb;
+  padding-top: 15px;
+}
+
+.footer a {
+  color: var(--primary-color);
+  text-decoration: none;
+  font-weight: 600;
+  transition: opacity 0.2s ease;
+}
+
+.footer a:hover {
+  opacity: 0.8;
+  text-decoration: underline;
+}
+
+/* Animations */
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideIn {
+  from { opacity: 0; transform: translateX(-10px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.fade-in-up {
+  animation: fadeInUp 0.6s ease-out forwards;
 }
