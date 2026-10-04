@@ -62,30 +62,36 @@ let lastReviews = [];
 
 /* ================= GENERATE REVIEW ================= */
 async function generateReview() {
-  const doctor = document.getElementById("doctor").value.trim();
-  const specificDoctor = document.getElementById("specific-doctor").value.trim(); 
-  const location = document.getElementById("location").value;
-  const treatment = document.getElementById("treatment").value.trim();
+  // The '?.' ensures the code won't crash if the HTML element is missing
+  const doctor = document.getElementById("doctor")?.value.trim() || "";
+  const specificDoctor = document.getElementById("specific-doctor")?.value.trim() || "";
+  const location = document.getElementById("location")?.value || "";
+  const treatment = document.getElementById("treatment")?.value.trim() || "";
   
   // HARDCODED DEFAULT: Always excellent
   const comment = "Excellent"; 
   
-  const length = document.getElementById("length").value;
-  const language = document.getElementById("language").value;
+  const length = document.getElementById("length")?.value || "medium";
+  const language = document.getElementById("language")?.value || "English";
+  
   const loading = document.getElementById("loading");
   const generateBtn = document.querySelector('.generate-btn');
 
-  // Removed '!comment' from the validation check since it's hardcoded now
   if (!doctor || !location || !treatment) {
     alert("Please fill all required fields.");
     return;
   }
 
   // Disable button to prevent spam clicks
-  generateBtn.disabled = true;
-  generateBtn.style.opacity = "0.7";
-  generateBtn.innerText = "Generating...";
-  loading.classList.remove("hidden");
+  if (generateBtn) {
+    generateBtn.disabled = true;
+    generateBtn.style.opacity = "0.7";
+    generateBtn.innerText = "Generating...";
+  }
+  
+  if (loading) {
+    loading.classList.remove("hidden");
+  }
 
   const payload = {
     doctor,
@@ -97,7 +103,9 @@ async function generateReview() {
     language
   };
 
-  // ... (rest of your existing try/catch logic remains exactly the same)
+  try {
+    const response = await fetch("/.netlify/functions/generate-review", {
+// ... The rest of your function remains exactly the same from here down ...
 
   try {
     loading.classList.remove("hidden");
