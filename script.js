@@ -76,15 +76,16 @@ let lastReviews = [];
 
 
 /* ================= GENERATE REVIEW ================= */
-
 async function generateReview() {
   const doctor = document.getElementById("doctor").value.trim();
+  const specificDoctor = document.getElementById("specific-doctor").value.trim(); // NEW
   const location = document.getElementById("location").value;
   const treatment = document.getElementById("treatment").value.trim();
   const comment = document.getElementById("comment").value;
   const length = document.getElementById("length").value;
   const language = document.getElementById("language").value;
   const loading = document.getElementById("loading");
+  const generateBtn = document.querySelector('.generate-btn');
 
   if (!doctor || !location || !treatment || !comment) {
     alert("Please fill all required fields.");
@@ -93,12 +94,15 @@ async function generateReview() {
 
   const payload = {
     doctor,
+    specificDoctor, // NEW: Added to payload
     location,
     treatment,
     comment,
     length,
     language
   };
+  
+  // ... rest of your existing function ...
 
   try {
     loading.classList.remove("hidden");
