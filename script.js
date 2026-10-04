@@ -63,31 +63,41 @@ let lastReviews = [];
 /* ================= GENERATE REVIEW ================= */
 async function generateReview() {
   const doctor = document.getElementById("doctor").value.trim();
-  const specificDoctor = document.getElementById("specific-doctor").value.trim(); // NEW
+  const specificDoctor = document.getElementById("specific-doctor").value.trim(); 
   const location = document.getElementById("location").value;
   const treatment = document.getElementById("treatment").value.trim();
-  const comment = document.getElementById("comment").value;
+  
+  // HARDCODED DEFAULT: Always excellent
+  const comment = "Excellent"; 
+  
   const length = document.getElementById("length").value;
   const language = document.getElementById("language").value;
   const loading = document.getElementById("loading");
   const generateBtn = document.querySelector('.generate-btn');
 
-  if (!doctor || !location || !treatment || !comment) {
+  // Removed '!comment' from the validation check since it's hardcoded now
+  if (!doctor || !location || !treatment) {
     alert("Please fill all required fields.");
     return;
   }
 
+  // Disable button to prevent spam clicks
+  generateBtn.disabled = true;
+  generateBtn.style.opacity = "0.7";
+  generateBtn.innerText = "Generating...";
+  loading.classList.remove("hidden");
+
   const payload = {
     doctor,
-    specificDoctor, // NEW: Added to payload
+    specificDoctor, 
     location,
     treatment,
-    comment,
+    comment, 
     length,
     language
   };
-  
-  // ... rest of your existing function ...
+
+  // ... (rest of your existing try/catch logic remains exactly the same)
 
   try {
     loading.classList.remove("hidden");
