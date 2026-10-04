@@ -17,7 +17,7 @@
       <img src="https://spyronixtech.in/wp-content/uploads/2026/06/cropped-Untitled-design-66.png" alt="Spyronix Logo" class="brand-logo">
     </div>
 
-    <h1>✨Review Assistant</h1>
+    <h1>✨ Spyronix Review Assistant</h1>
 
     <div class="form-group">
       <!-- Clinic/Hospital (Set automatically from URL) -->
@@ -28,13 +28,6 @@
         readonly
       >
 
-      <!-- Specific Doctor (Optional) -->
-      <input 
-        type="text" 
-        id="specific-doctor" 
-        placeholder="Treated by Doctor (Optional)"
-      >
-
       <!-- Locations will be added dynamically via script.js -->
       <select id="location"></select>
 
@@ -42,17 +35,8 @@
       <input 
         type="text" 
         id="treatment" 
-        placeholder="Treatment Received (e.g. Root Canal)"
+        placeholder="Treatment Received (Keyword)"
       >
-    </div>
-
-    <!-- Experience Dropdown -->
-    <div class="form-group">
-      <select id="comment">
-        <option value="Excellent">Excellent</option>
-        <option value="Very Good">Very Good</option>
-        <option value="Good">Good</option>
-      </select>
     </div>
 
     <!-- Review Settings Row -->
@@ -60,7 +44,6 @@
       <div class="input-col">
         <select id="length">
           <option value="short">Short Review</option>
-          <option value="medium" selected>Medium Review</option>
           <option value="long">Detailed Review</option>
         </select>
       </div>
@@ -79,10 +62,10 @@
       Generate Review
     </button>
 
-    <!-- Loading State -->
+<!-- Loading State -->
     <div id="loading" class="loading hidden">
       <div class="spinner"></div>
-      <span>AI is writing your reviews...</span>
+      <span>Crafting your perfect review...</span>
     </div>
 
     <!-- Output Container -->
