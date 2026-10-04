@@ -8,6 +8,86 @@
 
 <body>
 
+  <div class="wrapper">
+  <div class="card fade-in-up">
+    
+    <!-- Brand Logo -->
+    <div class="logo-container">
+      <img src="https://spyronixtech.in/wp-content/uploads/2026/06/cropped-Untitled-design-66.png" alt="Spyronix Logo" class="brand-logo">
+    </div>
+
+    <h1>AI Review Generator</h1>
+    <p class="subtitle">Generate authentic patient reviews instantly.</p>
+
+    <div class="form-group">
+      <!-- Clinic/Hospital -->
+      <label for="doctor">Clinic / Hospital</label>
+      <input type="text" id="doctor" placeholder="Clinic/Hospital Name" readonly>
+
+      <!-- Specific Doctor -->
+      <label for="specific-doctor">Treated By (Optional)</label>
+      <input type="text" id="specific-doctor" placeholder="e.g. Dr. John Doe">
+
+      <!-- Location -->
+      <label for="location">Branch / Location</label>
+      <select id="location"></select>
+
+      <!-- Treatment -->
+      <label for="treatment">Treatment Received</label>
+      <input type="text" id="treatment" placeholder="e.g. Root Canal, Consultation">
+    </div>
+
+    <!-- Review Settings -->
+    <div class="row">
+      <div class="input-col">
+        <label for="comment">Experience</label>
+        <select id="comment">
+          <option value="Excellent">Excellent</option>
+          <option value="Very Good">Very Good</option>
+          <option value="Good">Good</option>
+        </select>
+      </div>
+
+      <div class="input-col">
+        <label for="length">Review Length</label>
+        <select id="length">
+          <option value="short">Short</option>
+          <option value="medium" selected>Medium</option>
+          <option value="long">Detailed</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="input-col" style="width: 100%;">
+        <label for="language">Language</label>
+        <select id="language">
+          <option value="English">English</option>
+          <option value="Hindi">Hindi</option>
+          <option value="Marathi">Marathi</option>
+        </select>
+      </div>
+    </div>
+
+    <button class="generate-btn" onclick="generateReview()">
+      <span class="btn-text">Generate Review</span>
+    </button>
+
+    <div id="loading" class="loading hidden">
+      <div class="spinner"></div>
+      <span>AI is writing your reviews...</span>
+    </div>
+
+    <div id="reviews" class="reviews-container"></div>
+
+    <!-- Spyronix Footer -->
+    <div class="footer">
+      Made with Love by <a href="https://spyronixtech.in/" target="_blank">Spyronix</a>
+    </div>
+
+  </div>
+</div>
+
 <div class="wrapper">
   <div class="card">
     
