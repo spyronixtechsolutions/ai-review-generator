@@ -34,7 +34,7 @@ const doctors = {
   drsandeep: {
     name: "Dr. Sandeep's Eye Clinic",
     links: {
-      Sambhajinagar: "https://g.page/r/CXFIHvG3sWhIEAE/review" // Replace with Dr. Sandeep's Google Review Link
+      Wakad: "https://g.page/r/CfHhB4NRrlCiEBM/review" // Replace with Dr. Sandeep's Google Review Link
     }
   }
 };
