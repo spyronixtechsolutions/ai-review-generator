@@ -2,94 +2,95 @@ exports.handler = async (event) => {
   try {
     const data = event.body ? JSON.parse(event.body) : {};
 
-    const apiKey = process.env.GEMINI_API_KEY;
-    if (!apiKey) {
-      return {
-        statusCode: 500,
-        body: JSON.stringify({ 
-          error: "GEMINI_API_KEY environment variable is missing in Netlify configuration." 
-        })
-      };
-    }
-
     const lengthMap = {
-      short: "40 to 60 words",
+      short: "20 to 40 words",
       medium: "60 to 90 words",
       long: "100 to 140 words"
     };
 
     const selectedLength = lengthMap[data.length] || "60 to 90 words";
-    const doctorName = data.specificDoctor ? `${data.doctor} (${data.specificDoctor})` : data.doctor;
+
+    if (!process.env.GEMINI_API_KEY) {
+      return {
+        statusCode: 500,
+        body: JSON.stringify({ error: "Configuration Error: GEMINI_API_KEY is missing." })
+      };
+    }
+
+    const doctorName = data.specificDoctor ? `${data.doctor} (${data.specificDoctor})` : (data.doctor || 'a professional');
 
     const promptText = `
-You are an expert review writer. Generate exactly 3 completely different Google reviews for a medical facility.
+Generate exactly 3 completely different Google reviews.
 
-Clinic/Hospital: ${doctorName}
-Location: ${data.location}
-Treatment/Service: ${data.treatment}
-Overall Rating: ${data.comment || "Excellent"}
+Doctor/Hospital: ${doctorName}
+Location: ${data.location || 'the clinic'}
+Treatment: ${data.treatment || 'the service'}
+Comments: ${data.comment || 'Excellent'}
 
-Language: Write the review completely in ${data.language || "English"}.
+Language: Write the review completely in ${data.language || 'English'}.
 
 Length requirement:
 Each review must be ${selectedLength}.
 
-Formatting & Tone Rules:
+Formatting Rules:
 - WRITE STRICTLY IN THE FIRST PERSON ("I", "my", "me"). You are the patient who received this treatment.
 - Number each review as 1., 2., and 3.
 - Separate each review with two line breaks.
 - Natural, grateful, human tone.
-- Mention the location (${data.location}) only once per review.
+- Mention the location (${data.location || 'the clinic'}) only once per review.
 - No emojis, hashtags, prices, or phone numbers.
 - No medical guarantees.
-- Do not repeat identical phrases across reviews.
+- Write like a real person sharing experience.
+- Do not repeat sentences across reviews.
 `;
 
-    // Only active Gemini models
-    const models = ["gemini-2.5-flash-lite", "gemini-2.5-flash"];
-    let lastErrorMessage = "";
-
-    for (const model of models) {
-      try {
-        const response = await fetch(
-          `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`,
-          {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-              contents: [{ parts: [{ text: promptText }] }],
-              generationConfig: {
-                maxOutputTokens: 500,
-                temperature: 0.7
-              }
-            })
-          }
-        );
-
-        const result = await response.json();
-
-        if (response.ok && result.candidates && result.candidates[0]?.content?.parts[0]?.text) {
-          return {
-            statusCode: 200,
-            body: JSON.stringify({
-              review: result.candidates[0].content.parts[0].text
-            })
-          };
-        }
-
-        // Capture error message from current model
-        lastErrorMessage = result.error?.message || JSON.stringify(result);
-        console.error(`Error with ${model}:`, lastErrorMessage);
-
-      } catch (err) {
-        lastErrorMessage = err.message;
+    // Pass the API key securely via URL and the x-goog-api-key header
+    const response = await fetch(
+      `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash-lite:generateContent?key=${process.env.GEMINI_API_KEY}`,
+      {
+        method: "POST",
+        headers: { 
+          "Content-Type": "application/json",
+          "x-goog-api-key": process.env.GEMINI_API_KEY
+        },
+        body: JSON.stringify({
+          contents: [
+            {
+              parts: [
+                {
+                  text: promptText
+                }
+              ]
+            }
+          ]
+        })
       }
+    );
+
+    const result = await response.json();
+
+    // Catch raw API errors returned directly from Google
+    if (result.error) {
+      return {
+        statusCode: 500,
+        body: JSON.stringify({ error: "Gemini API rejected request", details: result.error })
+      };
+    }
+
+    if (!result.candidates || result.candidates.length === 0) {
+      return {
+        statusCode: 500,
+        body: JSON.stringify({ error: "Gemini API structure failed", details: result })
+      };
     }
 
     return {
-      statusCode: 500,
+      statusCode: 200,
+      headers: {
+        "Content-Type": "application/json"
+      },
       body: JSON.stringify({
-        error: `AI Generation Error: ${lastErrorMessage}`
+        review: result.candidates[0].content.parts[0].text
       })
     };
 
@@ -97,7 +98,8 @@ Formatting & Tone Rules:
     return {
       statusCode: 500,
       body: JSON.stringify({
-        error: `Server Error: ${err.message}`
+        error: "Server internal breakdown",
+        details: err.message
       })
     };
   }
