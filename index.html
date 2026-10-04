@@ -1,14 +1,15 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>AI Doctor Review Generator</title>
+  <meta charset="UTF-8">
+  <title>Spyronix Review Generator</title>
   <link rel="stylesheet" href="style.css">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 
 <body>
 
-  <div class="wrapper">
+<div class="wrapper">
   <div class="card fade-in-up">
     
     <!-- Brand Logo -->
@@ -16,51 +17,55 @@
       <img src="https://spyronixtech.in/wp-content/uploads/2026/06/cropped-Untitled-design-66.png" alt="Spyronix Logo" class="brand-logo">
     </div>
 
-    <h1>AI Review Generator</h1>
-    <p class="subtitle">Generate authentic patient reviews instantly.</p>
+    <h1>✨Review Assistant</h1>
 
     <div class="form-group">
-      <!-- Clinic/Hospital -->
-      <label for="doctor">Clinic / Hospital</label>
-      <input type="text" id="doctor" placeholder="Clinic/Hospital Name" readonly>
+      <!-- Clinic/Hospital (Set automatically from URL) -->
+      <input 
+        type="text" 
+        id="doctor" 
+        placeholder="Clinic/Hospital Name" 
+        readonly
+      >
 
-      <!-- Specific Doctor -->
-      <label for="specific-doctor">Treated By (Optional)</label>
-      <input type="text" id="specific-doctor" placeholder="e.g. Dr. John Doe">
+      <!-- Specific Doctor (Optional) -->
+      <input 
+        type="text" 
+        id="specific-doctor" 
+        placeholder="Treated by Doctor (Optional)"
+      >
 
-      <!-- Location -->
-      <label for="location">Branch / Location</label>
+      <!-- Locations will be added dynamically via script.js -->
       <select id="location"></select>
 
       <!-- Treatment -->
-      <label for="treatment">Treatment Received</label>
-      <input type="text" id="treatment" placeholder="e.g. Root Canal, Consultation">
+      <input 
+        type="text" 
+        id="treatment" 
+        placeholder="Treatment Received (e.g. Root Canal)"
+      >
     </div>
 
-    <!-- Review Settings -->
+    <!-- Experience Dropdown -->
+    <div class="form-group">
+      <select id="comment">
+        <option value="Excellent">Excellent</option>
+        <option value="Very Good">Very Good</option>
+        <option value="Good">Good</option>
+      </select>
+    </div>
+
+    <!-- Review Settings Row -->
     <div class="row">
       <div class="input-col">
-        <label for="comment">Experience</label>
-        <select id="comment">
-          <option value="Excellent">Excellent</option>
-          <option value="Very Good">Very Good</option>
-          <option value="Good">Good</option>
-        </select>
-      </div>
-
-      <div class="input-col">
-        <label for="length">Review Length</label>
         <select id="length">
-          <option value="short">Short</option>
-          <option value="medium" selected>Medium</option>
-          <option value="long">Detailed</option>
+          <option value="short">Short Review</option>
+          <option value="medium" selected>Medium Review</option>
+          <option value="long">Detailed Review</option>
         </select>
       </div>
-    </div>
 
-    <div class="row">
-      <div class="input-col" style="width: 100%;">
-        <label for="language">Language</label>
+      <div class="input-col">
         <select id="language">
           <option value="English">English</option>
           <option value="Hindi">Hindi</option>
@@ -69,15 +74,18 @@
       </div>
     </div>
 
+    <!-- Generate Button -->
     <button class="generate-btn" onclick="generateReview()">
-      <span class="btn-text">Generate Review</span>
+      Generate Review
     </button>
 
+    <!-- Loading State -->
     <div id="loading" class="loading hidden">
       <div class="spinner"></div>
       <span>AI is writing your reviews...</span>
     </div>
 
+    <!-- Output Container -->
     <div id="reviews" class="reviews-container"></div>
 
     <!-- Spyronix Footer -->
@@ -87,106 +95,6 @@
 
   </div>
 </div>
-
-<div class="wrapper">
-  <div class="card">
-    
-    <h1>✨ AI Review Assistant</h1>
-
-    <div class="form-group">
-
-      <!-- Doctor will be set automatically from URL -->
-      <input 
-        type="text" 
-        id="doctor" 
-        placeholder="Doctor Name"
-        readonly
-      >
-
-      <!-- Locations will be added dynamically -->
-      <select id="location">
-      </select>
-
-      <input 
-        type="text" 
-        id="treatment" 
-        placeholder="Treatment"
-      >
-      <div class="form-group">
-
-      <!-- Doctor/Hospital (Set automatically from URL) -->
-      <input 
-        type="text" 
-        id="doctor" 
-        placeholder="Clinic/Hospital Name"
-        readonly
-      >
-
-      <!-- NEW: Optional Specific Doctor Name -->
-      <input 
-        type="text" 
-        id="specific-doctor" 
-        placeholder="Treated by Doctor (Optional)"
-      >
-
-      <!-- Locations will be added dynamically -->
-      <select id="location"></select>
-
-      <input 
-        type="text" 
-        id="treatment" 
-        placeholder="Treatment"
-      >
-
-    </div>
-
-
-    <!-- Review quality -->
-    <div class="row">
-
-      <select id="comment">
-        <option value="Excellent">Excellent</option>
-        <option value="Very Good">Very Good</option>
-        <option value="Good">Good</option>
-      </select>
-
-    </div>
-
-
-    <!-- Review settings -->
-    <div class="row">
-
-      <select id="length">
-        <option value="short">Short Review</option>
-        <option value="medium" selected>Medium Review</option>
-        
-      </select>
-
-
-      <select id="language">
-        <option value="English">English</option>
-        <option value="Hindi">Hindi</option>
-        <option value="Marathi">Marathi</option>
-      </select>
-
-    </div>
-
-
-    <button class="generate-btn" onclick="generateReview()">
-      Generate Review
-    </button>
-
-
-    <div id="loading" class="loading hidden">
-      🤖 AI is writing your review...
-    </div>
-
-
-    <div id="reviews" class="reviews-container"></div>
-
-  </div>
-</div>
-
 
 <script src="script.js"></script>
 
