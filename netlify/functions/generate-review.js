@@ -7,14 +7,13 @@ exports.handler = async (event) => {
       return {
         statusCode: 500,
         body: JSON.stringify({ 
-          error: "API Key Missing", 
-          details: "GEMINI_API_KEY environment variable is not configured in Netlify." 
+          error: "GEMINI_API_KEY environment variable is missing." 
         })
       };
     }
 
     const lengthMap = {
-      short: "20 to 40 words",
+      short: "40 to 60 words",
       medium: "60 to 90 words",
       long: "100 to 140 words"
     };
@@ -46,43 +45,48 @@ Formatting & Tone Rules:
 - Do not repeat identical phrases across reviews.
 `;
 
-    // Production stable model string endpoint
-    const response = await fetch(
-      `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`,
-      {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          contents: [
-            {
-              parts: [{ text: promptText }]
-            }
-          ],
-          generationConfig: {
-            maxOutputTokens: 500,
-            temperature: 0.7
+    // Active Gemini models with automatic failover
+    const models = ["gemini-2.5-flash-lite", "gemini-2.5-flash", "gemini-2.0-flash"];
+    let lastErrorMessage = "";
+
+    for (const model of models) {
+      try {
+        const response = await fetch(
+          `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`,
+          {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              contents: [{ parts: [{ text: promptText }] }],
+              generationConfig: {
+                maxOutputTokens: 500,
+                temperature: 0.7
+              }
+            })
           }
-        })
+        );
+
+        const result = await response.json();
+
+        if (response.ok && result.candidates && result.candidates[0]?.content?.parts[0]?.text) {
+          return {
+            statusCode: 200,
+            body: JSON.stringify({
+              review: result.candidates[0].content.parts[0].text
+            })
+          };
+        }
+
+        lastErrorMessage = result.error?.message || JSON.stringify(result);
+      } catch (err) {
+        lastErrorMessage = err.message;
       }
-    );
-
-    const result = await response.json();
-
-    if (!response.ok || !result.candidates || !result.candidates[0]?.content?.parts[0]?.text) {
-      console.error("Gemini API Error details:", JSON.stringify(result));
-      return {
-        statusCode: 500,
-        body: JSON.stringify({ 
-          error: result.error?.message || "Gemini API request failed", 
-          details: result 
-        })
-      };
     }
 
     return {
-      statusCode: 200,
+      statusCode: 500,
       body: JSON.stringify({
-        review: result.candidates[0].content.parts[0].text
+        error: `AI Generation Error: ${lastErrorMessage}`
       })
     };
 
@@ -90,8 +94,7 @@ Formatting & Tone Rules:
     return {
       statusCode: 500,
       body: JSON.stringify({
-        error: "Server Error",
-        details: err.message
+        error: `Server Error: ${err.message}`
       })
     };
   }
