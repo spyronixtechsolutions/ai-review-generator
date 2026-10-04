@@ -1,14 +1,16 @@
-/* ================= CSS VARIABLES ================= */
+/* ================= SPYRONIX BRAND VARIABLES ================= */
 :root {
-  --primary-color: #2563eb; /* Spyronix Blue - Change this hex to match your logo exactly */
-  --primary-hover: #1d4ed8;
-  --bg-gradient-1: #f3f4f6;
-  --bg-gradient-2: #e5e7eb;
-  --text-main: #1f2937;
-  --text-muted: #6b7280;
-  --card-bg: rgba(255, 255, 255, 0.95);
+  --primary-amber: #f89935;
+  --primary-red: #f04c23;
+  --primary-gradient: linear-gradient(135deg, #f89935 0%, #f04c23 100%);
+  --primary-gradient-hover: linear-gradient(135deg, #e58727 0%, #d93d16 100%);
+  --bg-gradient-1: #f8fafc;
+  --bg-gradient-2: #e2e8f0;
+  --text-main: #0f172a;
+  --text-muted: #64748b;
+  --card-bg: rgba(255, 255, 255, 0.98);
   --border-radius: 16px;
-  --input-border: #d1d5db;
+  --input-border: #cbd5e1;
 }
 
 * {
@@ -30,85 +32,76 @@ body {
 
 .wrapper {
   width: 100%;
-  max-width: 550px;
+  max-width: 500px;
 }
 
-/* Card Styling */
+/* Card Container */
 .card {
   background: var(--card-bg);
-  backdrop-filter: blur(10px);
-  padding: 40px;
+  backdrop-filter: blur(12px);
+  padding: 36px;
   border-radius: var(--border-radius);
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08), 0 1px 3px rgba(0,0,0,0.05);
-  border: 1px solid rgba(255,255,255,0.5);
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.08), 0 3px 10px rgba(0, 0, 0, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.8);
 }
 
-/* Logo */
+/* Logo Styling */
 .logo-container {
   text-align: center;
-  margin-bottom: 20px;
+  margin-bottom: 16px;
 }
+
 .brand-logo {
-  max-width: 160px;
+  max-width: 140px;
   height: auto;
 }
 
 h1 {
   text-align: center;
-  font-size: 24px;
+  font-size: 22px;
   font-weight: 700;
   color: var(--text-main);
-  margin-bottom: 5px;
+  margin-bottom: 24px;
 }
 
-.subtitle {
-  text-align: center;
-  font-size: 14px;
-  color: var(--text-muted);
-  margin-bottom: 30px;
-}
-
-/* Form Fields */
-.form-group, .row {
-  margin-bottom: 20px;
+/* Form Groups */
+.form-group {
+  margin-bottom: 14px;
 }
 
 .row {
   display: flex;
-  gap: 15px;
+  gap: 12px;
+  margin-bottom: 14px;
 }
 
 .input-col {
   flex: 1;
 }
 
-label {
-  font-size: 13px;
-  font-weight: 600;
-  margin-bottom: 6px;
-  display: block;
-  color: var(--text-main);
-}
-
 input, select {
   width: 100%;
-  padding: 12px 16px;
+  padding: 12px 14px;
   border-radius: 10px;
   border: 1px solid var(--input-border);
-  background: #fff;
+  background: #ffffff;
   color: var(--text-main);
   font-size: 14px;
-  transition: all 0.3s ease;
+  transition: all 0.25s ease;
   outline: none;
 }
 
+input::placeholder {
+  color: #94a3b8;
+}
+
 input:focus, select:focus {
-  border-color: var(--primary-color);
-  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+  border-color: var(--primary-red);
+  box-shadow: 0 0 0 3px rgba(240, 76, 35, 0.15);
 }
 
 input[readonly] {
-  background: #f9fafb;
+  background: #f8fafc;
   cursor: not-allowed;
   color: var(--text-muted);
 }
@@ -116,82 +109,81 @@ input[readonly] {
 select {
   cursor: pointer;
   appearance: none;
-  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%236b7280' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2364748b' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
   background-repeat: no-repeat;
   background-position: right 12px center;
   background-size: 16px;
 }
 
-/* Primary Button */
+/* Primary Button with Spyronix Gradient */
 .generate-btn {
   width: 100%;
   padding: 14px;
-  background: var(--primary-color);
+  background: var(--primary-gradient);
   border: none;
   border-radius: 10px;
   font-weight: 600;
-  font-size: 16px;
+  font-size: 15px;
   color: white;
   cursor: pointer;
   transition: all 0.3s ease;
-  margin-top: 10px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  margin-top: 8px;
+  box-shadow: 0 6px 18px rgba(240, 76, 35, 0.28);
 }
 
 .generate-btn:hover {
-  background: var(--primary-hover);
+  background: var(--primary-gradient-hover);
   transform: translateY(-2px);
-  box-shadow: 0 8px 15px rgba(37, 99, 235, 0.2);
+  box-shadow: 0 10px 22px rgba(240, 76, 35, 0.38);
 }
 
 .generate-btn:disabled {
-  background: #9ca3af;
+  background: #94a3b8;
   cursor: not-allowed;
   transform: none;
   box-shadow: none;
 }
 
-/* Reviews */
+/* Reviews Styling */
 .reviews-container {
-  margin-top: 30px;
+  margin-top: 24px;
 }
 
 .review-card {
   background: #f8fafc;
-  padding: 20px;
+  padding: 18px;
   border-radius: 12px;
-  margin-bottom: 16px;
+  margin-bottom: 14px;
   font-size: 14px;
   line-height: 1.6;
   border: 1px solid #e2e8f0;
   color: var(--text-main);
-  animation: slideIn 0.4s ease forwards;
+  animation: slideIn 0.35s ease forwards;
 }
 
 .review-card button {
-  margin-top: 15px;
-  padding: 8px 16px;
+  margin-top: 12px;
+  padding: 7px 14px;
   border-radius: 6px;
-  border: 1px solid var(--primary-color);
+  border: 1px solid var(--primary-red);
   background: transparent;
-  color: var(--primary-color);
+  color: var(--primary-red);
   cursor: pointer;
   font-size: 13px;
   font-weight: 600;
   transition: 0.2s ease;
-  margin-right: 10px;
+  margin-right: 8px;
 }
 
 .review-card button:hover {
-  background: var(--primary-color);
+  background: var(--primary-gradient);
   color: white;
+  border-color: transparent;
 }
 
-/* Loading State */
+/* Loading Spinner */
 .loading {
-  margin-top: 25px;
+  margin-top: 20px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -205,9 +197,9 @@ select {
   width: 18px;
   height: 18px;
   border: 2px solid var(--input-border);
-  border-top-color: var(--primary-color);
+  border-top-color: var(--primary-red);
   border-radius: 50%;
-  animation: spin 1s linear infinite;
+  animation: spin 0.8s linear infinite;
 }
 
 .hidden {
@@ -216,16 +208,16 @@ select {
 
 /* Spyronix Footer */
 .footer {
-  margin-top: 40px;
+  margin-top: 30px;
   text-align: center;
   font-size: 13px;
   color: var(--text-muted);
-  border-top: 1px solid #e5e7eb;
-  padding-top: 15px;
+  border-top: 1px solid #e2e8f0;
+  padding-top: 16px;
 }
 
 .footer a {
-  color: var(--primary-color);
+  color: var(--primary-red);
   text-decoration: none;
   font-weight: 600;
   transition: opacity 0.2s ease;
@@ -238,12 +230,12 @@ select {
 
 /* Animations */
 @keyframes fadeInUp {
-  from { opacity: 0; transform: translateY(20px); }
+  from { opacity: 0; transform: translateY(16px); }
   to { opacity: 1; transform: translateY(0); }
 }
 
 @keyframes slideIn {
-  from { opacity: 0; transform: translateX(-10px); }
+  from { opacity: 0; transform: translateX(-8px); }
   to { opacity: 1; transform: translateX(0); }
 }
 
@@ -252,5 +244,5 @@ select {
 }
 
 .fade-in-up {
-  animation: fadeInUp 0.6s ease-out forwards;
+  animation: fadeInUp 0.5s ease-out forwards;
 }
