@@ -19,14 +19,15 @@ exports.handler = async (event) => {
           contents: [
             {
               parts: [
-                {
+{
                   text: `
 Generate exactly 3 completely different Google reviews.
 
-Doctor: ${data.doctor}
+Clinic/Hospital: ${data.doctor}
+${data.specificDoctor ? `Treated by Doctor: ${data.specificDoctor}` : ''}
 Location: ${data.location}
 Treatment: ${data.treatment}
-Comments: ${data.comment}
+Overall Experience: ${data.comment}
 
 Language: Write the review completely in ${data.language}.
 
@@ -34,15 +35,15 @@ Length requirement:
 Each review must be ${selectedLength}.
 
 Formatting Rules:
+- WRITE IN THE FIRST PERSON ("I", "my", "me"). You are the patient who received this treatment. Do not write from a third-person perspective.
 - Number each review as 1., 2., and 3.
 - Separate each review with two line breaks.
-- Natural, human tone
-- Simple language
-- Mention the location only once per review
-- No emojis, hashtags, prices, or phone numbers
-- No medical guarantees
-- Write like a real person sharing experience
-- Do not repeat sentences across reviews
+- Natural, human tone. Simple language.
+- Mention the location only once per review.
+- ${data.specificDoctor ? `Make sure to mention and praise ${data.specificDoctor} directly in the review.` : 'Mention the clinic/hospital name naturally.'}
+- No emojis, hashtags, prices, or phone numbers.
+- No medical guarantees.
+- Do not repeat sentences across reviews.
 `
                 }
               ]
