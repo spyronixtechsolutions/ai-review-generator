@@ -1,17 +1,9 @@
 const doctors = {
-  mukundagrawal: {
-    name: "Dr. Mukund Agrawal",
-    links: {
-      Nagpur: "https://g.page/r/CfKOK0J3yq2vEBE/review",
-      Itarsi: "https://g.page/r/CWUODJ90WG1rEBE/review",
-      Betul: "https://g.page/r/CQMT68pfmtDcEBI/review"
-    }
-  },
 
-  ibocc: {
-    name: "i-BOCC Cancer Center",
+  drsandeep: {
+    name: "Dr Sandeep's Eye Clinic",
     links: {
-      Sambhajinagar: "https://g.page/r/CTjDCglmbMSQEAE/review"
+      Sambhajinagar: "https://g.page/r/CfHhB4NRrlCiEBM/review"
     }
   },
 
@@ -19,13 +11,6 @@ const doctors = {
     name: "Dr. Abhishek Bhalotia",
     links: {
       Gondia: "https://g.page/r/CbQZZElmOXyTEAE/review"
-    }
-  },
-
-  vishalchandak: {
-    name: "Dr. Vishal Chandak",
-    links: {
-      Sambhajinagar: "https://g.page/r/CXFIHvG3sWhIEAE/review"
     }
   }
 };
