@@ -166,11 +166,11 @@ async function generateReview(options = {}) {
   try {
     let result = await requestReview(payloadStr);
 
-    // A slow or busy AI usually works on a second try, so retry once before showing an error,
-    // asking for the backup model first since the main one just failed
+    // A slow or busy AI usually works on a second try, so retry once before showing an error.
+    // The function itself switches to its backup model when the main one is overloaded.
     if (!result.review && result.retryable) {
       await new Promise(resolve => setTimeout(resolve, 1500));
-      result = await requestReview(JSON.stringify({ ...payload, preferBackup: true }));
+      result = await requestReview(payloadStr);
     }
 
     if (!result.review) {
