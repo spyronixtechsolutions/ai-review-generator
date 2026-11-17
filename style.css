@@ -640,11 +640,56 @@ select {
   .review-card button { flex: 1 1 auto; justify-content: center; }
 }
 
-/* Respect visitors who turn off motion */
-@media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after {
-    animation-duration: 0.001ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.001ms !important;
+/* ================= TOUCH SCREENS ================= */
+/* Phones have no hover, so give the same feedback on tap */
+@media (hover: none) {
+  .generate-btn:active {
+    transform: scale(0.97);
+    box-shadow: 0 8px 18px -10px rgba(240, 76, 35, 0.7);
   }
+  .review-card:active {
+    border-color: #f3d4bd;
+    box-shadow: 0 22px 40px -26px rgba(240, 80, 35, 0.45);
+  }
+  .review-card button:active {
+    background: var(--primary-gradient);
+    color: #fff;
+    border-color: transparent;
+  }
+  .review-card button.is-done:active {
+    background: #e8f7ee;
+    color: #1d7a3a;
+    border-color: #bfe8cf;
+  }
+}
+
+/* ================= REDUCED MOTION ================= */
+/* Many phones turn this on with battery saver or "Remove animations". Keep the gentle effects
+   (fades, shimmer, glow, typing caret) and drop only the large movement that can cause discomfort. */
+@media (prefers-reduced-motion: reduce) {
+  .blob,
+  .brand-logo {
+    animation: none;
+  }
+  .card {
+    animation-name: fadeIn;
+  }
+  .card > *,
+  .loading,
+  .review-actions {
+    animation-name: fadeIn;
+  }
+  .review-card {
+    animation-name: fadeIn;
+  }
+  .generate-btn:hover,
+  .review-card:hover,
+  .review-card button:hover {
+    transform: none;
+  }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
 }
