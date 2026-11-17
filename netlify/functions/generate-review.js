@@ -7,7 +7,9 @@ const MIN_ATTEMPT_MS = 2500;
 // The backup model is used when the main one is overloaded, rate-limited or too slow.
 // Both can be changed in Netlify's environment variables without editing this file.
 const PRIMARY_MODEL = process.env.GEMINI_MODEL || "gemini-3.5-flash-lite";
-const BACKUP_MODEL = process.env.GEMINI_FALLBACK_MODEL || "gemini-2.5-flash-lite";
+// A different model family from the main one, so it is less likely to be overloaded at the same time.
+// (gemini-2.5-flash-lite was retired for new users in 2026.)
+const BACKUP_MODEL = process.env.GEMINI_FALLBACK_MODEL || "gemini-3.8-flash";
 
 /** One Gemini call. Returns { text } on success, or { retryable, status, details } on failure. */
 async function callGemini(model, promptText, timeoutMs) {
