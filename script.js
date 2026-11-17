@@ -109,7 +109,11 @@ async function requestReview(payloadStr) {
   }
 }
 
-async function generateReview() {
+// How many times in a row the page has asked for fresh reviews because every review was a duplicate
+let duplicateRegenerations = 0;
+const MAX_DUPLICATE_REGENERATIONS = 2;
+
+async function generateReview(options = {}) {
   const doctor = document.getElementById("doctor")?.value.trim() || "";
   const specificDoctor = document.getElementById("specific-doctor")?.value.trim() || "";
   const location = document.getElementById("location")?.value || "";
@@ -142,8 +146,8 @@ async function generateReview() {
 
   const payloadStr = JSON.stringify(payload);
 
-  // Return cached result if same query is fired again
-  if (window.lastPayloadStr === payloadStr && window.lastResult) {
+  // Return cached result if same query is fired again (unless fresh reviews were requested)
+  if (!options.fresh && window.lastPayloadStr === payloadStr && window.lastResult) {
     await displayReviews(window.lastResult);
     return;
   }
@@ -162,10 +166,11 @@ async function generateReview() {
   try {
     let result = await requestReview(payloadStr);
 
-    // A slow or busy AI usually works on a second try, so retry once before showing an error
+    // A slow or busy AI usually works on a second try, so retry once before showing an error,
+    // asking for the backup model first since the main one just failed
     if (!result.review && result.retryable) {
       await new Promise(resolve => setTimeout(resolve, 1500));
-      result = await requestReview(payloadStr);
+      result = await requestReview(JSON.stringify({ ...payload, preferBackup: true }));
     }
 
     if (!result.review) {
@@ -221,10 +226,18 @@ async function displayReviews(textBlock) {
   });
 
   if (uniqueReviews.length === 0) {
-    alert("Duplicate detected. Regenerating...");
-    generateReview();
+    // Ask for new reviews instead of re-showing the cached ones, and stop after a couple of tries
+    // so the page can't loop forever
+    if (duplicateRegenerations < MAX_DUPLICATE_REGENERATIONS) {
+      duplicateRegenerations++;
+      await generateReview({ fresh: true });
+    } else {
+      duplicateRegenerations = 0;
+      alert("Couldn't create new reviews right now. Try changing the treatment or review length.");
+    }
     return;
   }
+  duplicateRegenerations = 0;
 
   // Type all reviews concurrently
   await Promise.all(
