@@ -11,6 +11,12 @@ const PRIMARY_MODEL = process.env.GEMINI_MODEL || "gemini-3.5-flash-lite";
 // (gemini-2.5-flash-lite was retired for new users in 2026.)
 const BACKUP_MODEL = process.env.GEMINI_FALLBACK_MODEL || "gemini-3.8-flash";
 
+// Extra generation settings per model. The backup "thinks" before answering by default,
+// which is too slow for short reviews, so ask it to keep thinking to a minimum.
+const GENERATION_CONFIG = {
+  [BACKUP_MODEL]: { thinkingConfig: { thinkingLevel: "low" } }
+};
+
 /** One Gemini call. Returns { text } on success, or { retryable, status, details } on failure. */
 async function callGemini(model, promptText, timeoutMs) {
   const controller = new AbortController();
@@ -34,7 +40,8 @@ async function callGemini(model, promptText, timeoutMs) {
                 }
               ]
             }
-          ]
+          ],
+          ...(GENERATION_CONFIG[model] ? { generationConfig: GENERATION_CONFIG[model] } : {})
         }),
         signal: controller.signal
       }
