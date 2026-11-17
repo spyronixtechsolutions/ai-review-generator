@@ -218,9 +218,11 @@ async function displayReviews(textBlock) {
   
   reviewsContainer.innerHTML = "";
 
+  // Gemini numbers the reviews ("1.", "2)", "**3.**", Devanagari "१."); drop the number so it
+  // isn't shown or copied along with the review
   const reviewList = textBlock
     .split(/\n\s*\n/)
-    .map(r => r.trim())
+    .map(r => r.trim().replace(/^\**\s*(?:review\s*)?[0-9०-९]+\s*[.):\-–]\s*\**\s*/i, ""))
     .filter(r => r.length > 20);
 
   let uniqueReviews = [];
