@@ -88,13 +88,20 @@ window.onload = function () {
 // or a server error counts as retryable, so the caller can try once more.
 async function requestReview(payloadStr) {
   try {
-    const response = await fetch("/.netlify/functions/generate-review", {
+    const post = (url) => fetch(url, {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
       },
       body: payloadStr
     });
+    // The edge function can wait up to 40 s for Gemini; the older serverless one only 10 s,
+    // so it is only used if the edge function isn't available
+    // (Without the edge function, the site's catch-all rewrite would answer with HTML, not JSON.)
+    let response = await post("/api/generate-review");
+    if (!(response.headers.get("Content-Type") || "").includes("application/json")) {
+      response = await post("/.netlify/functions/generate-review");
+    }
     let result;
     try {
       result = await response.json();
