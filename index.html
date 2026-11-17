@@ -2,59 +2,85 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Spyronix Review Generator</title>
-  <link rel="stylesheet" href="style.css">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Spyronix Review Generator</title>
+  <meta name="description" content="Write your Google review in seconds with the Spyronix Review Assistant.">
+  <meta name="theme-color" content="#f3752b">
+  <link rel="icon" href="https://spyronixtech.in/media/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Urbanist:wght@400;500;600;700;800&display=swap">
+  <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
-<div class="wrapper">
-  <div class="card fade-in-up">
-    
-    <!-- Brand Logo -->
-    <div class="logo-container">
-      <img src="https://spyronixtech.in/wp-content/uploads/2026/06/cropped-Untitled-design-66.png" alt="Spyronix Logo" class="brand-logo">
-    </div>
+<!-- Soft animated background -->
+<div class="bg" aria-hidden="true">
+  <span class="blob blob--1"></span>
+  <span class="blob blob--2"></span>
+  <span class="blob blob--3"></span>
+</div>
 
-    <h1>✨ Spyronix Review Assistant</h1>
+<main class="wrapper">
+  <div class="card">
+
+    <!-- Brand -->
+    <header class="hero">
+      <img src="https://spyronixtech.in/media/spyronix-logo.png" alt="Spyronix" class="brand-logo" width="64" height="54">
+      <p class="eyebrow"><span class="eyebrow__dot"></span>AI review assistant</p>
+      <h1>Share your experience <span class="grad-text">in seconds</span></h1>
+      <p class="lede">Tell us your treatment, pick a style, and we’ll draft a review you can post on Google.</p>
+    </header>
 
     <div class="form-group">
       <!-- Clinic/Hospital (Set automatically from URL) -->
-      <input 
-        type="text" 
-        id="doctor" 
-        placeholder="Clinic/Hospital Name" 
-        readonly
-      >
+      <label class="field">
+        <span class="field__label">Clinic / Hospital</span>
+        <span class="field__control field__control--icon field__control--clinic">
+          <input type="text" id="doctor" placeholder="Clinic/Hospital Name" readonly>
+        </span>
+      </label>
 
       <!-- Locations will be added dynamically via script.js -->
-      <select id="location"></select>
+      <label class="field">
+        <span class="field__label">Branch</span>
+        <span class="field__control field__control--icon field__control--pin">
+          <select id="location"></select>
+        </span>
+      </label>
 
       <!-- Treatment -->
-      <input 
-        type="text" 
-        id="treatment" 
-        placeholder="Treatment Received (Keyword)"
-      >
+      <label class="field">
+        <span class="field__label">Treatment received</span>
+        <span class="field__control field__control--icon field__control--spark">
+          <input type="text" id="treatment" placeholder="e.g. Cataract surgery, eye check-up" autocomplete="off">
+        </span>
+      </label>
     </div>
 
     <!-- Review Settings Row -->
     <div class="row">
-      <div class="input-col">
-        <select id="length">
-          <option value="short">Short Review</option>
-          <option value="long">Detailed Review</option>
-        </select>
-      </div>
+      <label class="field input-col">
+        <span class="field__label">Review length</span>
+        <span class="field__control">
+          <select id="length">
+            <option value="short">Short Review</option>
+            <option value="long">Detailed Review</option>
+          </select>
+        </span>
+      </label>
 
-      <div class="input-col">
-        <select id="language">
-          <option value="English">English</option>
-          <option value="Hindi">Hindi</option>
-          <option value="Marathi">Marathi</option>
-        </select>
-      </div>
+      <label class="field input-col">
+        <span class="field__label">Language</span>
+        <span class="field__control">
+          <select id="language">
+            <option value="English">English</option>
+            <option value="Hindi">Hindi</option>
+            <option value="Marathi">Marathi</option>
+          </select>
+        </span>
+      </label>
     </div>
 
     <!-- Generate Button -->
@@ -62,22 +88,25 @@
       Generate Review
     </button>
 
-<!-- Loading State -->
-    <div id="loading" class="loading hidden">
-      <div class="spinner"></div>
-      <span>Crafting your perfect review...</span>
+    <!-- Loading State -->
+    <div id="loading" class="loading hidden" role="status" aria-live="polite">
+      <div class="loading__row">
+        <span class="dots" aria-hidden="true"><i></i><i></i><i></i></span>
+        <span>Crafting your perfect review...</span>
+      </div>
+      <div class="skeleton" aria-hidden="true"><i></i><i></i><i></i></div>
     </div>
 
     <!-- Output Container -->
-    <div id="reviews" class="reviews-container"></div>
+    <div id="reviews" class="reviews-container" aria-live="polite"></div>
 
     <!-- Spyronix Footer -->
-    <div class="footer">
-      Made with Love by <a href="https://spyronixtech.in/" target="_blank">Spyronix</a>
-    </div>
+    <footer class="footer">
+      Made with <span class="heart" aria-label="love">♥</span> by <a href="https://spyronixtech.in/" target="_blank" rel="noopener">Spyronix</a>
+    </footer>
 
   </div>
-</div>
+</main>
 
 <script src="script.js"></script>
 

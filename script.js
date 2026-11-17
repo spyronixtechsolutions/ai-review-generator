@@ -268,23 +268,27 @@ async function typeReview(text, container) {
 
   container.appendChild(div);
 
-  // Typewriter effect
+  // Typewriter effect, with a blinking caret while typing
+  p.classList.add("typing");
   for (let i = 0; i < text.length; i++) {
     p.textContent += text.charAt(i);
     await sleep(12);
   }
+  p.classList.remove("typing");
 
   // Post & Copy action buttons
   const buttonWrapper = document.createElement("div");
-  buttonWrapper.style.marginTop = "12px";
-  buttonWrapper.style.display = "flex";
-  buttonWrapper.style.gap = "8px";
+  buttonWrapper.className = "review-actions";
 
   const copyBtn = document.createElement("button");
+  copyBtn.type = "button";
+  copyBtn.className = "btn-copy";
   copyBtn.innerText = "Copy Review";
-  copyBtn.onclick = () => copyText(text);
+  copyBtn.onclick = () => copyText(text, copyBtn);
 
   const postBtn = document.createElement("button");
+  postBtn.type = "button";
+  postBtn.className = "btn-post";
   postBtn.innerText = "Post on Google";
   postBtn.onclick = () => postGoogle();
 
@@ -296,9 +300,22 @@ async function typeReview(text, container) {
 }
 
 /* ================= COPY & POST ACTIONS ================= */
-function copyText(text) {
-  navigator.clipboard.writeText(text);
-  alert("Review copied to clipboard!");
+// Confirms on the button itself instead of an alert; falls back to an alert if the browser blocks copying
+async function copyText(text, button) {
+  try {
+    await navigator.clipboard.writeText(text);
+  } catch (e) {
+    alert("Couldn't copy automatically. Please select the review text and copy it.");
+    return;
+  }
+  if (!button) return;
+  button.classList.add("is-done");
+  button.innerText = "Copied ✓";
+  clearTimeout(button._reset);
+  button._reset = setTimeout(() => {
+    button.classList.remove("is-done");
+    button.innerText = "Copy Review";
+  }, 1800);
 }
 
 function postGoogle() {
