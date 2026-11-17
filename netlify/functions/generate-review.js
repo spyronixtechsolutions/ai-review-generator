@@ -1,3 +1,7 @@
+// Netlify stops a function after 10 seconds, so give up on Gemini just before that and
+// return a clean "busy" response the page can retry, instead of an unhandled timeout.
+const GEMINI_TIMEOUT_MS = 8500;
+
 exports.handler = async (event) => {
   try {
     const data = event.body ? JSON.parse(event.body) : {};
@@ -44,36 +48,55 @@ Formatting Rules:
 - Do not repeat sentences across reviews.
 `;
 
-    // Pass the API key securely via URL and the x-goog-api-key header
-    const response = await fetch(
-      `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash-lite:generateContent?key=${process.env.GEMINI_API_KEY}`,
-      {
-        method: "POST",
-        headers: { 
-          "Content-Type": "application/json",
-          "x-goog-api-key": process.env.GEMINI_API_KEY
-        },
-        body: JSON.stringify({
-          contents: [
-            {
-              parts: [
-                {
-                  text: promptText
-                }
-              ]
-            }
-          ]
-        })
+    // The API key goes only in the x-goog-api-key header: keys in URLs end up in request logs
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), GEMINI_TIMEOUT_MS);
+    let response;
+    try {
+      response = await fetch(
+        "https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash-lite:generateContent",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "x-goog-api-key": process.env.GEMINI_API_KEY
+          },
+          body: JSON.stringify({
+            contents: [
+              {
+                parts: [
+                  {
+                    text: promptText
+                  }
+                ]
+              }
+            ]
+          }),
+          signal: controller.signal
+        }
+      );
+    } catch (err) {
+      if (err.name === "AbortError") {
+        return {
+          statusCode: 503,
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ error: "Gemini took too long to respond", retryable: true, details: { error: { code: 503 } } })
+        };
       }
-    );
+      throw err;
+    } finally {
+      clearTimeout(timer);
+    }
 
     const result = await response.json();
 
     // Catch raw API errors returned directly from Google
     if (result.error) {
+      const code = result.error.code;
       return {
-        statusCode: 500,
-        body: JSON.stringify({ error: "Gemini API rejected request", details: result.error })
+        statusCode: code === 429 || code === 503 ? code : 500,
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ error: "Gemini API rejected request", retryable: code === 429 || code === 503, details: result })
       };
     }
 

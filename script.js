@@ -84,6 +84,31 @@ window.onload = function () {
 };
 
 /* ================= GENERATE REVIEW ================= */
+// Calls the review function. A reply that isn't JSON (for example Netlify's own timeout page)
+// or a server error counts as retryable, so the caller can try once more.
+async function requestReview(payloadStr) {
+  try {
+    const response = await fetch("/.netlify/functions/generate-review", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: payloadStr
+    });
+    let result;
+    try {
+      result = await response.json();
+    } catch (e) {
+      result = {};
+    }
+    if (!result.review && response.status >= 500) result.retryable = true;
+    return result;
+  } catch (error) {
+    console.error(error);
+    return { retryable: true };
+  }
+}
+
 async function generateReview() {
   const doctor = document.getElementById("doctor")?.value.trim() || "";
   const specificDoctor = document.getElementById("specific-doctor")?.value.trim() || "";
@@ -135,15 +160,13 @@ async function generateReview() {
   }
 
   try {
-    const response = await fetch("/.netlify/functions/generate-review", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify(payload)
-    });
+    let result = await requestReview(payloadStr);
 
-    const result = await response.json();
+    // A slow or busy AI usually works on a second try, so retry once before showing an error
+    if (!result.review && result.retryable) {
+      await new Promise(resolve => setTimeout(resolve, 1500));
+      result = await requestReview(payloadStr);
+    }
 
     if (!result.review) {
       if (result.details?.error?.code === 429) {
