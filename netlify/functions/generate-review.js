@@ -1,6 +1,6 @@
 // Netlify stops a function after 10 seconds. Everything below must finish inside DEADLINE_MS, so a slow or
 // overloaded model returns a clean "busy" response the page can retry, instead of an unhandled timeout.
-const DEADLINE_MS = 8800;
+const DEADLINE_MS = 8300;
 // Don't start a model call with less time than this left; it would only time out.
 const MIN_ATTEMPT_MS = 2500;
 
@@ -109,6 +109,8 @@ Formatting Rules:
     // The page's automatic retry asks for the backup first, since the main model just failed it
     const models = data.preferBackup ? [BACKUP_MODEL, PRIMARY_MODEL] : [PRIMARY_MODEL, BACKUP_MODEL];
     let failure = null;
+    // Which models were tried and why they failed, so problems show up in the response
+    const attempts = [];
 
     for (const model of models) {
       const remaining = DEADLINE_MS - (Date.now() - startedAt);
@@ -123,10 +125,12 @@ Formatting Rules:
           },
           body: JSON.stringify({
             review: attempt.text,
-            model
+            model,
+            attempts
           })
         };
       }
+      attempts.push({ model, code: attempt.details?.error?.code ?? null, message: String(attempt.details?.error?.message || "").slice(0, 160) });
       failure = attempt;
       if (!attempt.retryable) break;
     }
@@ -139,6 +143,7 @@ Formatting Rules:
       body: JSON.stringify({
         error: "Gemini could not generate a review",
         retryable: !failure || failure.retryable,
+        attempts,
         details: failure ? failure.details : { error: { code: 503, message: "No time left to try another model" } }
       })
     };
